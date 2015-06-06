@@ -2,7 +2,7 @@
 
 var Maps = google.maps;
 
-Ractive.components["map"] = Ractive.extend({
+Ractive.components['map'] = Ractive.extend({
   template: '#map',
   isolated: true,
   onrender: function() {
@@ -23,5 +23,18 @@ Ractive.components["map"] = Ractive.extend({
     this.observe('options', function(options) {
       map.setOptions(options);
     });
+  }
+});
+
+
+Ractive.components['collapsible'] = Ractive.extend({
+  template: '#collapsible',
+  isolated: true,
+  oninit: function() {
+    this.set({ collapsed: false });
+    this.on('toggle', this.toggle.bind(this));
+  },
+  toggle: function() {
+    this.set('collapsed', !this.get('collapsed'));
   }
 });
