@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>GMaps Style Builder</title>
+
+    <style>
+     body {
+         margin: 0;
+         padding: 0;
+         background: #ddd;
+     }
+     .app {
+         position: fixed;
+         width: 100%;
+         height: 100%;
+     }
+     .map {
+         width: 100%;
+         height: 100%;
+     }
+     .controls {
+         position: absolute;
+         top: 1em;
+         right: 1em;
+         z-index: 1000;
+         background: #fff;
+         padding: 1em;
+         width: 250px;
+     }
+     .controls label,
+     .controls input,
+     .controls select {
+         display: block;
+         width: 100%;
+     }
+     .form-group {
+         margin-bottom: 0.5em;
+     }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script id="template" type="text/ractive">
+      <div class="app">
+        <div class="map">
+          {{#options.center.lat}}
+          <map options="{{options}}"></map>
+          {{else}}
+          <p class="loading">Loading...</p>
+          {{/options}}
+        </div>
+
+        <div class="controls">
+          <div class="form-group">
+            <label for="latitude">Latitude</label>
+            <input name="latitude" type="number" step="0.0001"
+                   value="{{options.center.lat}}">
+          </div>
+
+          <div class="form-group">
+            <label for="longitude">Longitude</label>
+            <input name="longitude" type="number" step="0.0001"
+                   value="{{options.center.lng}}">
+          </div>
+
+          <div class="form-group">
+            <label for="zoom">Zoom</label>
+            <input name="zoom" type="number" min="1" max="21"
+                   value="{{options.zoom}}">
+          </div>
+
+          <div style="max-height:350px;overflow:scroll">
+            <div class="form-group">
+              <label for="styles">
+                Styles:
+                <button on-click="addStyle">Add</button>
+              </label>
+              {{#options.styles}}
+              <fieldset>
+                <div class="form-group">
+                  <label for="{{.}}.featureType">Feature</label>
+                  <select value="{{featureType}}">
+                    {{#FEATURES}}
+                    <option value="{{.}}">{{.}}</option>
+                    {{/FEATURES}}
+                  </select>
+                </div>
+              </fieldset>
+              {{/options.styles}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script id="map" type="text/ractive">
+     <div class="map-canvas" style="width:100%;height:100%"></div>
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWUjzm2-h1y1GTdl-K5fFv2Sd5uAIjYpk&language=vi"></script>
+    <script src="bower_components/ractive/ractive.min.js"></script>
+    <script src="components.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
