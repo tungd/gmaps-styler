@@ -1,0 +1,24 @@
+{
+  "name": "gmaps-style-builder",
+  "version": "1.0.0",
+  "description": "Google Map StyledMap builder.",
+  "main": "app.js",
+  "dependencies": {
+    "lazy.js": "^0.4.0",
+    "ractive": "^0.7.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tungd/gmaps-style-builder.git"
+  },
+  "author": "Tung Dao <me@tungdao.com>",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/tungd/gmaps-style-builder/issues"
+  },
+  "homepage": "https://github.com/tungd/gmaps-style-builder"
+}

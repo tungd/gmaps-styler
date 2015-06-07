@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>GMaps Style Builder</title>
+
+    <style>
+     body {
+         margin: 0;
+         padding: 0;
+         background: #ddd;
+     }
+     .app {
+         position: fixed;
+         width: 100%;
+         height: 100%;
+     }
+     .map {
+         width: 100%;
+         height: 100%;
+     }
+     .controls {
+         position: absolute;
+         top: 1em;
+         right: 1em;
+         z-index: 1000;
+         background: #fff;
+         padding: 1em;
+         width: 250px;
+     }
+     .controls label,
+     .controls input,
+     .controls select {
+         display: block;
+         width: 100%;
+     }
+     .form-group {
+         margin-bottom: 0.5em;
+     }
+     .colorpicker {
+         position: relative;
+         display: inline-block;
+     }
+     .colorpicker__button {
+         display: block;
+         width: 2em;
+         height: 2em;
+         cursor: pointer;
+         border: 2px solid #ddd;
+     }
+     .colorpicker__pallete {
+         display: block;
+         position: absolute;
+         z-index: 100;
+         cursor: pointer;
+         background-color: #ddd;
+     }
+     .colorpicker__pallete-off {
+         display: none;
+     }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script id="template" type="text/ractive">
+      <div class="app">
+        <div class="map">
+          {{#options.center.lat}}
+          <map options="{{options}}"></map>
+          {{else}}
+          <p class="loading">Loading...</p>
+          {{/options}}
+        </div>
+
+        <div class="controls">
+          <div class="form-group">
+            <label for="latitude">Latitude</label>
+            <input name="latitude" type="number" step="0.0001"
+                   value="{{options.center.lat}}">
+          </div>
+
+          <div class="form-group">
+            <label for="longitude">Longitude</label>
+            <input name="longitude" type="number" step="0.0001"
+                   value="{{options.center.lng}}">
+          </div>
+
+          <div class="form-group">
+            <label for="zoom">Zoom</label>
+            <input name="zoom" type="number" min="1" max="21"
+                   value="{{options.zoom}}">
+          </div>
+
+          <div style="max-height:550px">
+            <div class="form-group">
+              <label for="style">
+                Style:
+                <button on-click="clear" style="display:inline-block">Reset</button>
+                <button on-click="export" style="display:inline-block">Export</button>
+              </label>
+
+              <div class="form-group">
+                <label for="featureType">Feature</label>
+                <select value="{{selectedFeatureType}}">
+                  {{#FEATURES}}
+                  <option value="{{.}}">{{.}}</option>
+                  {{/FEATURES}}
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="fillColor">
+                  <colorpicker value="{{selectedStyle['geometry_fill']}}"></colorpicker>
+                  : fillColor
+                </label>
+                <label for="borderColor">
+                  <colorpicker value="{{selectedStyle['geometry_stroke']}}"></colorpicker>
+                  : borderColor
+                </label>
+                <label for="textColor">
+                  <colorpicker value="{{selectedStyle['labels_text_fill']}}"></colorpicker>
+                  : textColor
+                </label>
+                <label for="textBorderColor">
+                  <colorpicker value="{{selectedStyle['labels_text_stroke']}}"></colorpicker>
+                  : textBorderColor
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script id="map" type="text/ractive">
+     <div class="map-canvas" style="width:100%;height:100%"></div>
+    </script>
+
+    <script id="collapsible" type="text/ractive">
+     <div class="collapsible" style="width:100%;height:100%">
+       <h3 class="collapsible__header"
+           on-click="toggle">{{title}}</h3>
+       <div class="collapsible__content collapsible__content-{{collapsed?'off':'on'}}"
+            style="overflow:scroll">
+         {{yield}}
+       </div>
+     </div>
+    </script>
+
+    <script id="colorpicker" type="text/ractive">
+     <div class="colorpicker">
+       <button class="colorpicker__button"
+               style="background:rgb({{value[0]}},{{value[1]}},{{value[2]}})"
+               on-click="toggle"></button>
+       <canvas width="{{size}}" height="{{size}}"
+               class="colorpicker__pallete colorpicker__pallete-{{picking?'on':'off'}}"
+
+               on-click="pick"
+               on-mousemove="preview"></canvas>
+     </div>
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWUjzm2-h1y1GTdl-K5fFv2Sd5uAIjYpk&language=vi"></script>
+    <script src="node_modules/ractive/ractive.min.js"></script>
+    <script src="node_modules/lazy.js/lazy.min.js"></script>
+    <script src="components.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
