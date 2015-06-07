@@ -39,6 +39,7 @@
      }
      .colorpicker {
          position: relative;
+         display: inline-block;
      }
      .colorpicker__button {
          display: block;
@@ -93,7 +94,12 @@
 
           <div style="max-height:550px">
             <div class="form-group">
-              <label for="style">Style:</label>
+              <label for="style">
+                Style:
+                <button on-click="clear" style="display:inline-block">Reset</button>
+                <button on-click="export" style="display:inline-block">Export</button>
+              </label>
+
               <div class="form-group">
                 <label for="featureType">Feature</label>
                 <select value="{{selectedFeatureType}}">
@@ -105,20 +111,20 @@
 
               <div class="form-group">
                 <label for="fillColor">
-                  fillColor:
                   <colorpicker value="{{selectedStyle['geometry_fill']}}"></colorpicker>
+                  : fillColor
                 </label>
                 <label for="borderColor">
-                  borderColor:
                   <colorpicker value="{{selectedStyle['geometry_stroke']}}"></colorpicker>
+                  : borderColor
                 </label>
                 <label for="textColor">
-                  textColor:
                   <colorpicker value="{{selectedStyle['labels_text_fill']}}"></colorpicker>
+                  : textColor
                 </label>
                 <label for="textBorderColor">
-                  textBorderColor:
                   <colorpicker value="{{selectedStyle['labels_text_stroke']}}"></colorpicker>
+                  : textBorderColor
                 </label>
               </div>
             </div>

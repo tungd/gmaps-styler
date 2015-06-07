@@ -83,7 +83,9 @@ var app = new Ractive({
   },
   oninit: function() {
     var _this = this;
-    this._init();
+    this.initialize();
+    this.on('clear', this.clear.bind(this));
+    this.on('export', this.export.bind(this));
 
     this.observe('selectedStyle', function(val) {
       var styles = _this.get('options.styles'),
@@ -108,7 +110,7 @@ var app = new Ractive({
       _this.set('options.styles', styles);
     });
   },
-  _init: function() {
+  initialize: function() {
     var _this = this;
 
     this.set({
@@ -132,5 +134,14 @@ var app = new Ractive({
       _this.set('options.center', { lat: 21, lng: 105 });
       console.error(e);
     }
+  },
+  clear: function() {
+    this.set('options.styles', []);
+  },
+  export: function() {
+    var styles = this.get('options.styles');
+    window.open(
+      'data:application/json,' + JSON.stringify(styles),
+      '_blank');
   }
 });
