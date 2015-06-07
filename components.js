@@ -45,11 +45,13 @@ Ractive.components['colorpicker'] = Ractive.extend({
   isolated: true,
   oninit: function() {
     this.set({
-      picking: true,
-      value: this.get('value') || '#fff'
+      picking: false,
+      value: this.get('value') || '#fff',
+      size: this.get('width') || 240
     });
 
     this.on('pick', this.pick.bind(this));
+    this.on('preview', this.preview.bind(this));
     this.on('start', this.start.bind(this));
     this.on('end', this.end.bind(this));
     this.on('toggle', this.toggle.bind(this));
@@ -68,15 +70,17 @@ Ractive.components['colorpicker'] = Ractive.extend({
   end: function() {
     this.set('picking', false);
   },
-  pick: function(e) {
-    var x = e.original.layerX, y = e.original.layerY;
-
-    console.log(x, y, Rgb(x, y, 160, 160));
+  preview: function(e) {
+    var x = e.original.layerX, y = e.original.layerY,
+        size = this.get('size');
 
     this.set({
-      picking: false,
-      value: Rgb(x, y, 160, 160)
+      value: Rgb(x, y, size, size)
     });
+  },
+  pick: function(e) {
+    this.preview(e);
+    this.fire('end');
   },
   draw: function(canvas) {
     var ctx = canvas.getContext('2d'),

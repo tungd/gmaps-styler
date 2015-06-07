@@ -96,10 +96,11 @@
        <button class="colorpicker__button"
                style="background:rgb({{value[0]}},{{value[1]}},{{value[2]}})"
                on-click="toggle"></button>
-       <canvas width="160" height="160"
+       <canvas width="{{size}}" height="{{size}}"
                class="colorpicker__pallete colorpicker__pallete-{{picking?'on':'off'}}"
 
-               on-click="pick"></canvas>
+               on-click="pick"
+               on-mousemove="preview"></canvas>
      </div>
     </script>
 
