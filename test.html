@@ -34,6 +34,26 @@
      .collapsible__content p:first-child {
          margin-top: 0.5em;
      }
+     .colorpicker {
+         position: relative;
+     }
+     .colorpicker__button {
+         display: block;
+         width: 2em;
+         height: 2em;
+         cursor: pointer;
+         border: 2px solid #ddd;
+     }
+     .colorpicker__pallete {
+         display: block;
+         position: absolute;
+         z-index: 100;
+         cursor: pointer;
+         background-color: #ddd;
+     }
+     .colorpicker__pallete-off {
+         display: none;
+     }
     </style>
   </head>
   <body>
@@ -50,6 +70,10 @@
           <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?</p>
         </collapsible>
       </div>
+
+      <div style="width:300px;height:200px;margin:1em">
+        <colorpicker value="#000"></colorpicker>
+      </div>
     </script>
 
     <script id="map" type="text/ractive">
@@ -64,6 +88,18 @@
             style="overflow:scroll">
          {{yield}}
        </div>
+     </div>
+    </script>
+
+    <script id="colorpicker" type="text/ractive">
+     <div class="colorpicker">
+       <button class="colorpicker__button"
+               style="background:rgb({{value[0]}},{{value[1]}},{{value[2]}})"
+               on-click="toggle"></button>
+       <canvas width="160" height="160"
+               class="colorpicker__pallete colorpicker__pallete-{{picking?'on':'off'}}"
+
+               on-click="pick"></canvas>
      </div>
     </script>
 
