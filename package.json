@@ -8,17 +8,14 @@
     "ractive": "^0.7.3"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tungd/gmaps-style-builder.git"
+    "url": "https://github.com/tungd/gmaps-styler.git"
   },
   "author": "Tung Dao <me@tungdao.com>",
   "license": "BSD",
   "bugs": {
-    "url": "https://github.com/tungd/gmaps-style-builder/issues"
+    "url": "https://github.com/tungd/gmaps-styler/issues"
   },
-  "homepage": "https://github.com/tungd/gmaps-style-builder"
+  "homepage": "https://tungd.github.io/gmaps-styler"
 }
