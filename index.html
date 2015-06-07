@@ -37,6 +37,26 @@
      .form-group {
          margin-bottom: 0.5em;
      }
+     .colorpicker {
+         position: relative;
+     }
+     .colorpicker__button {
+         display: block;
+         width: 2em;
+         height: 2em;
+         cursor: pointer;
+         border: 2px solid #ddd;
+     }
+     .colorpicker__pallete {
+         display: block;
+         position: absolute;
+         z-index: 100;
+         cursor: pointer;
+         background-color: #ddd;
+     }
+     .colorpicker__pallete-off {
+         display: none;
+     }
     </style>
   </head>
   <body>
@@ -71,24 +91,36 @@
                    value="{{options.zoom}}">
           </div>
 
-          <div style="max-height:350px;overflow:scroll">
+          <div style="max-height:550px">
             <div class="form-group">
-              <label for="styles">
-                Styles:
-                <button on-click="addStyle">Add</button>
-              </label>
-              {{#options.styles}}
-              <fieldset>
-                <div class="form-group">
-                  <label for="{{.}}.featureType">Feature</label>
-                  <select value="{{featureType}}">
-                    {{#FEATURES}}
-                    <option value="{{.}}">{{.}}</option>
-                    {{/FEATURES}}
-                  </select>
-                </div>
-              </fieldset>
-              {{/options.styles}}
+              <label for="style">Style:</label>
+              <div class="form-group">
+                <label for="featureType">Feature</label>
+                <select value="{{selectedFeatureType}}">
+                  {{#FEATURES}}
+                  <option value="{{.}}">{{.}}</option>
+                  {{/FEATURES}}
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="fillColor">
+                  fillColor:
+                  <colorpicker value="{{selectedStyle['geometry_fill']}}"></colorpicker>
+                </label>
+                <label for="borderColor">
+                  borderColor:
+                  <colorpicker value="{{selectedStyle['geometry_stroke']}}"></colorpicker>
+                </label>
+                <label for="textColor">
+                  textColor:
+                  <colorpicker value="{{selectedStyle['labels_text_fill']}}"></colorpicker>
+                </label>
+                <label for="textBorderColor">
+                  textBorderColor:
+                  <colorpicker value="{{selectedStyle['labels_text_stroke']}}"></colorpicker>
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -99,8 +131,33 @@
      <div class="map-canvas" style="width:100%;height:100%"></div>
     </script>
 
+    <script id="collapsible" type="text/ractive">
+     <div class="collapsible" style="width:100%;height:100%">
+       <h3 class="collapsible__header"
+           on-click="toggle">{{title}}</h3>
+       <div class="collapsible__content collapsible__content-{{collapsed?'off':'on'}}"
+            style="overflow:scroll">
+         {{yield}}
+       </div>
+     </div>
+    </script>
+
+    <script id="colorpicker" type="text/ractive">
+     <div class="colorpicker">
+       <button class="colorpicker__button"
+               style="background:rgb({{value[0]}},{{value[1]}},{{value[2]}})"
+               on-click="toggle"></button>
+       <canvas width="{{size}}" height="{{size}}"
+               class="colorpicker__pallete colorpicker__pallete-{{picking?'on':'off'}}"
+
+               on-click="pick"
+               on-mousemove="preview"></canvas>
+     </div>
+    </script>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCWUjzm2-h1y1GTdl-K5fFv2Sd5uAIjYpk&language=vi"></script>
-    <script src="bower_components/ractive/ractive.min.js"></script>
+    <script src="node_modules/ractive/ractive.min.js"></script>
+    <script src="node_modules/lazy.js/lazy.min.js"></script>
     <script src="components.js"></script>
     <script src="app.js"></script>
   </body>

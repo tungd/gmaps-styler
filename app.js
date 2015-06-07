@@ -1,6 +1,7 @@
-/*global Ractive google*/
+/*global Ractive Lazy google*/
 
-var Maps = google.maps;
+var Maps = google.maps,
+    _ = Lazy;
 
 // https://developers.google.com/maps/documentation/javascript/reference#MapTypeStyleFeatureType
 // [].map.call(document.querySelectorAll('[summary*="MapTypeStyleFeatureType"] td:first-child code span'), function(e) { return e.innerHTML.replace(/<wbr>/g, '') })
@@ -42,19 +43,28 @@ var FEATURES = [
 
 // [].map.call(document.querySelectorAll('[summary*="MapTypeStyleElementType"] td:first-child code span'), function(e) { return e.innerHTML.replace(/<wbr>/g, '') })
 var ELEMENTS = [
-  "all",
-  "geometry",
+  // "all",
+  // "geometry",
   "geometry.fill",
   "geometry.stroke",
-  "labels",
-  "labels.icon",
-  "labels.text",
+  // "labels",
+  // "labels.icon",
+  // "labels.text",
   "labels.text.fill",
   "labels.text.stroke"
 ];
 
 function formatStyleName(style) {
   return style;
+}
+
+function RgbToHex(r, g, b) {
+  return [
+    '#',
+    ('00' + Number(r).toString(16)).substr(-2),
+    ('00' + Number(g).toString(16)).substr(-2),
+    ('00' + Number(b).toString(16)).substr(-2)
+  ].join('');
 }
 
 var app = new Ractive({
@@ -72,11 +82,42 @@ var app = new Ractive({
     formatStyleName: formatStyleName
   },
   oninit: function() {
-    this.init();
-    this.on('addStyle', this.addStyle.bind(this));
-  },
-  init: function() {
     var _this = this;
+    this._init();
+
+    this.observe('selectedStyle', function(val) {
+      var styles = _this.get('options.styles'),
+          feature = _this.get('selectedFeatureType'),
+          style, color, filter;
+
+      _(ELEMENTS).each(function(element) {
+        color = val[element.replace(/\./g, '_')];
+        if (!color || color == '#fff') return;
+
+        filter = { featureType: feature, elementType: element };
+        style = _(styles).findWhere(filter);
+
+        if (!style) {
+          style = filter;
+          styles.push(filter);
+        }
+
+        style.stylers = [{ color: RgbToHex.apply(null, color) }];
+      });
+
+      _this.set('options.styles', styles);
+    });
+  },
+  _init: function() {
+    var _this = this;
+
+    this.set({
+      selectedFeatureType: FEATURES[0],
+      selectedStyle: {
+        geometry: { fill: '#fff', stroke: '#fff' },
+        text: { fill: '#fff', stroke: '#fff' }
+      }
+    });
 
     try {
       navigator.geolocation.getCurrentPosition(function(position) {
@@ -91,13 +132,5 @@ var app = new Ractive({
       _this.set('options.center', { lat: 21, lng: 105 });
       console.error(e);
     }
-  },
-  addStyle: function() {
-    var styles = this.get('options').styles || [];
-    styles.push({
-      featureType: '',
-      elementType: '',
-      styles: [{  }]
-    })
   }
 });
