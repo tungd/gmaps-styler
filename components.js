@@ -47,7 +47,8 @@ Ractive.components['colorpicker'] = Ractive.extend({
     this.set({
       picking: false,
       value: this.get('value') || '#fff',
-      size: this.get('width') || 240
+      size: this.get('width') || 240,
+      RgbToHex: RgbToHex
     });
 
     this.on('pick', this.pick.bind(this));
@@ -55,6 +56,7 @@ Ractive.components['colorpicker'] = Ractive.extend({
     this.on('start', this.start.bind(this));
     this.on('end', this.end.bind(this));
     this.on('toggle', this.toggle.bind(this));
+    this.on('pickHex', this.pickHex.bind(this));
 
     // document.addEventListener('click', this.end.bind(this), true);
   },
@@ -80,6 +82,12 @@ Ractive.components['colorpicker'] = Ractive.extend({
   },
   pick: function(e) {
     this.preview(e);
+    this.fire('end');
+  },
+  pickHex: function(e) {
+    this.set({
+      value: HexToRgb(e.node.value)
+    });
     this.fire('end');
   },
   draw: function(canvas) {
@@ -114,7 +122,7 @@ var Memoized = function(fn, self) {
       cache[key] = fn.apply(self, arguments);
     }
     return cache[key];
-  }
+  };
 };
 
 var Rgb = (function() {
@@ -157,4 +165,41 @@ var HslToRgb = (function() {
   }
 
   return Memoized(_HslToRgb);
+}());
+
+var RgbToHex = (function() {
+  function _RgbToHex(r, g, b) {
+    if (arguments.length == 1) {
+      g = r[1];
+      b = r[2];
+      r = r[0];
+    }
+
+    return [
+      '#',
+      ('00' + Number(r).toString(16)).substr(-2),
+      ('00' + Number(g).toString(16)).substr(-2),
+      ('00' + Number(b).toString(16)).substr(-2)
+    ].join('');
+  }
+
+  return Memoized(_RgbToHex);
+})();
+
+var HexToRgb = (function() {
+  function _HexToRgb(hex) {
+    if (hex.lastIndexOf('#') > -1) {
+      hex = hex.replace(/#/, '0x');
+    } else {
+      hex = '0x' + hex;
+    }
+
+    return [
+      hex >> 16,
+      (hex & 0x00FF00) >> 8,
+      hex & 0x0000FF
+    ];
+  }
+
+  return Memoized(_HexToRgb);
 }());
