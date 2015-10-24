@@ -41,8 +41,8 @@
          position: relative;
          display: inline-block;
      }
-     .colorpicker__button {
-         display: block;
+     .colorpicker button.colorpicker__button {
+         display: inline-block !important;
          width: 2em;
          height: 2em;
          cursor: pointer;
@@ -57,6 +57,10 @@
      }
      .colorpicker__pallete-off {
          display: none;
+     }
+     .colorpicker input.colorpicker__input {
+       display: inline-block;
+       width: 9em;
      }
     </style>
   </head>
@@ -153,6 +157,8 @@
        <button class="colorpicker__button"
                style="background:rgb({{value[0]}},{{value[1]}},{{value[2]}})"
                on-click="toggle"></button>
+       <input type="text" class="colorpicker__input"
+              value="{{RgbToHex(value)}}" on-change="pickHex">
        <canvas width="{{size}}" height="{{size}}"
                class="colorpicker__pallete colorpicker__pallete-{{picking?'on':'off'}}"
                on-click="pick"

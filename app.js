@@ -1,4 +1,4 @@
-/*global Ractive Lazy google*/
+/*global Ractive Lazy google RgbToHex*/
 
 var Maps = google.maps,
     _ = Lazy;
@@ -58,15 +58,6 @@ function formatStyleName(style) {
   return style;
 }
 
-function RgbToHex(r, g, b) {
-  return [
-    '#',
-    ('00' + Number(r).toString(16)).substr(-2),
-    ('00' + Number(g).toString(16)).substr(-2),
-    ('00' + Number(b).toString(16)).substr(-2)
-  ].join('');
-}
-
 var app = new Ractive({
   el: '#app',
   template: '#template',
@@ -104,7 +95,7 @@ var app = new Ractive({
           styles.push(filter);
         }
 
-        style.stylers = [{ color: RgbToHex.apply(null, color) }];
+        style.stylers = [{ color: RgbToHex(color) }];
       });
 
       _this.set('options.styles', styles);
