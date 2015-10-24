@@ -77,6 +77,7 @@ var app = new Ractive({
     this.initialize();
     this.on('clear', this.clear.bind(this));
     this.on('export', this.export.bind(this));
+    this.on('setStyle', this.setStyle.bind(this));
 
     this.observe('selectedStyle', function(val) {
       var styles = _this.get('options.styles'),
@@ -134,5 +135,9 @@ var app = new Ractive({
     window.open(
       'data:application/json,' + JSON.stringify(styles),
       '_blank');
+  },
+  setStyle: function(e) {
+    console.log(JSON.parse(e.node.value));
+    this.set('options.styles', JSON.parse(e.node.value));
   }
 });

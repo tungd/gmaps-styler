@@ -131,6 +131,10 @@
                   : textBorderColor
                 </label>
               </div>
+
+              <div class="form-group">
+                <textarea style="width:100%" rows="16" on-change="setStyle" value="{{JSON.stringify(options.styles, null, 2)}}"></textarea>
+              </div>
             </div>
           </div>
         </div>
